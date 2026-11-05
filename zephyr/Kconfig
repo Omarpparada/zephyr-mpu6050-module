@@ -1,0 +1,4 @@
+# Punto de entrada del Kconfig. 
+if SENSOR
+rsource "drivers/sensor/Kconfig"
+endif # SENSOR

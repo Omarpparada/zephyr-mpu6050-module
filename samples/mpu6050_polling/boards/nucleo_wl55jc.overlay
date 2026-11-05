@@ -1,0 +1,8 @@
+&arduino_i2c {
+	status = "okay";
+	mpu6050@68 {
+		compatible = "mpu6050";
+		reg = <0x68>;
+		status = "okay";
+	};
+};

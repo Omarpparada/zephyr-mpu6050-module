@@ -1,0 +1,5 @@
+zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/../../../include)
+if(CONFIG_MPU6050)
+  zephyr_library()
+  zephyr_library_sources(mpu6050.c)
+endif()
