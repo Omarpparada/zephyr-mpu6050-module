@@ -60,6 +60,6 @@ int main(void)
            gyro_deg_s[0], gyro_deg_s[1], gyro_deg_s[2],
            attitude_deg[0], attitude_deg[1], attitude_deg[2]);
 
-    k_sleep(K_MSEC(500));
+    k_sleep(K_MSEC(1000));
   }
 }

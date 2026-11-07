@@ -122,7 +122,7 @@ static int mpu6050_init(const struct device *dev)
     LOG_ERR("Failed to reset device");
     return err;
   }
-  k_sleep(K_MSEC(100));
+  k_msleep(100);
 
   // Wake up device and use one of the gyroscopes as clock source (recommended by datasheet)
   err = i2c_reg_write_byte_dt(&config->i2c, MPU6050_REG_PWR_MGMT_1, 0x01);
@@ -132,7 +132,7 @@ static int mpu6050_init(const struct device *dev)
     return err;
   }
 
-  k_sleep(K_MSEC(30));
+  k_msleep(30);
   return 0;
 }
 

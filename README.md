@@ -30,3 +30,12 @@ There is an example in `samples/mpu6050_polling`:
 ## Hardware
 
 The supplied overlay targets the Nucleo WL55JC and uses its `arduino_i2c` bus. Connect SDA/SCL to the corresponding bus pins, provide a common ground, and use power and I2C voltage levels compatible with the module and board. With AD0 low, the I2C address is `0x68`. With AD0 high, change the overlay node name and `reg` property to `0x69`. The expected `WHO_AM_I` value remains `0x68`.
+
+```dts
+&arduino_i2c {
+	mpu6050@68 {
+		compatible = "mpu6050";
+		reg = <0x68>;
+	};
+};
+```
