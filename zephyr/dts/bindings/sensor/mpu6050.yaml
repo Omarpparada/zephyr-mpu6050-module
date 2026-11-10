@@ -1,3 +1,36 @@
 description: "MPU6050 IMU sensor"
 compatible: "mpu6050"
 include: [sensor-device.yaml, i2c-device.yaml]
+
+# https://docs.zephyrproject.org/latest/build/dts/bindings-syntax.html#propertieshttps://docs.zephyrproject.org/latest/build/dts/bindings-syntax.html#properties
+properties:
+  gyro-fs:
+    type: int
+    default: 250
+    enum: [250, 500, 1000, 2000]
+    description: |
+      Gyroscope full-scale range, +/- X deg/s (GYRO_CONFIG.FS_SEL).
+
+  accel-fs:
+    type: int
+    default: 2
+    enum: [2, 4, 8, 16]
+    description: |
+      Accelerometer full-scale range, +/- X g (ACCEL_CONFIG.AFS_SEL).
+
+  smplrt-div:
+    type: int
+    default: 0
+    description: |
+      Sample rate divider (SMPLRT_DIV): rate = gyro output rate / (1 + X).
+      Valid values 0 to 255. The default matches the power-on reset state.
+
+  dlpf-cfg:
+    type: int
+    default: 0
+    enum: [0, 1, 2, 3, 4, 5, 6]
+    description: |
+      Digital low-pass filter setting (CONFIG.DLPF_CFG). See the register
+      map for the bandwidth of each value. It also changes the gyro output
+      rate that SMPLRT_DIV divides. The default matches the power-on reset
+      state (filter off).
