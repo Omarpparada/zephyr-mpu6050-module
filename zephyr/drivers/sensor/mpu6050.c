@@ -175,7 +175,7 @@ static int mpu6050_init(const struct device *dev) {
     LOG_ERR("Failed to reset device");
     return err;
   }
-  k_sleep(K_MSEC(100));
+  k_msleep(100);
 
   // Wake up device and use one of the gyroscopes as clock source (recommended
   // by datasheet)

@@ -1,12 +1,8 @@
-# Sirve para crear CONFIG_MPU6050. CMake lo revisa para decidir si mpu6050.c se construye.
-# Los comentarios aplican a la línea siguiente.
+# Creates CONFIG_MPU6050. CMake checks if mpu6050.c is built.
 config MPU6050
 	bool "MPU6050 IMU Sensor"
-    # Solo delcarado si se indica en el DT de la aplicacion
 	default y
-    # El sensor solo se declara si el DT declara "mpu6050"
 	depends on DT_HAS_MPU6050_ENABLED
-    # Patron habitual para indicar la depencia dle periferico.
 	select I2C
 	help
 	  MPU6050 IMU Sensor
