@@ -6,14 +6,21 @@ This repository contains the IMU driver and a simple test application.
 
 ## Driver
 
-The driver checks the device identity, resets the sensor, and wakes it using the X-axis gyroscope as the clock reference. It uses the default ranges after reset: +/-2 g for acceleration and +/-250 degrees/s for angular velocity. The sample-rate divider and digital low-pass filter settings remain at their reset defaults.
+The driver checks the device identity, resets the sensor, and wakes it using the X-axis gyroscope as the clock reference. Ranges, sample-rate divider and low-pass filter come from devicetree. The defaults match the reset state, so an overlay that sets none of them behaves as before (+/-2 g, +/-250 deg/s, no filter).
+
+| Property | Values | Default | Register |
+| --- | --- | --- | --- |
+| `gyro-fs` | 250, 500, 1000, 2000 deg/s | 250 | `GYRO_CONFIG.FS_SEL` |
+| `accel-fs` | 2, 4, 8, 16 g | 2 | `ACCEL_CONFIG.AFS_SEL` |
+| `smplrt-div` | 0-255 | 0 | `SMPLRT_DIV` |
+| `dlpf-cfg` | 0-6 | 0 | `CONFIG.DLPF_CFG` |
 
 A single 14-byte I2C burst reads acceleration, temperature, and gyroscope registers. Temperature is skipped. The six axis measurements are transformed into 16-bit integers and exposed through two channels:
 
 | Zephyr channel | Output units | Conversion |
 | --- | --- | --- |
-| `SENSOR_CHAN_ACCEL_XYZ` | m/s2 | `raw * 9.80665 / 16384` |
-| `SENSOR_CHAN_GYRO_XYZ` | rad/s | `raw * pi / (131 * 180)` |
+| `SENSOR_CHAN_ACCEL_XYZ` | m/s2 | `raw * 9.80665 / (16384 >> AFS_SEL)` |
+| `SENSOR_CHAN_GYRO_XYZ` | rad/s | `raw * pi / (180 * LSB per deg/s)` |
 
 These conversion factors depend on the selected ranges. Acceleration includes gravity: at rest, its magnitude should be close to 9.81 m/s2, not zero. The driver returns errors to the caller; recovery is the application's responsibility.
 
