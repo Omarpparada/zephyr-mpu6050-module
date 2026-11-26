@@ -194,6 +194,12 @@ static int mpu6050_init(const struct device *dev) {
   return 0;
 }
 
+// deinit example from drivers/haptics/cirrus/cs40l5x.c
+static int __maybe_unused mpu6050_deinit(const struct device *dev) {
+  ARG_UNUSED(dev);
+  return 0;
+}
+
 #define MPU6050_INIT(i)                                                        \
   static struct mpu6050_data mpu6050_data_##i;                                 \
                                                                                \
@@ -205,8 +211,10 @@ static int mpu6050_init(const struct device *dev) {
       .dlpf_cfg = DT_INST_PROP(i, dlpf_cfg),                                   \
   };                                                                           \
                                                                                \
-  SENSOR_DEVICE_DT_INST_DEFINE(i, mpu6050_init, NULL, &mpu6050_data_##i,       \
-                               &mpu6050_config_##i, POST_KERNEL,               \
-                               CONFIG_SENSOR_INIT_PRIORITY, &mpu6050_api);
+  DEVICE_DT_INST_DEINIT_DEFINE(i, mpu6050_init, mpu6050_deinit, NULL,          \
+                               &mpu6050_data_##i, &mpu6050_config_##i,         \
+                               POST_KERNEL, CONFIG_SENSOR_INIT_PRIORITY,       \
+                               &mpu6050_api);                                  \
+  SENSOR_INFO_DT_DEFINE(DT_DRV_INST(i));
 
 DT_INST_FOREACH_STATUS_OKAY(MPU6050_INIT)
